@@ -85,7 +85,7 @@ const VisitorCard = ({ visitor, onExit, onDelete }: Props) => {
                 borderRadius: "16px",
                 border: "1px solid #e5e7eb",
                 borderLeft: `4px solid ${config.border}`,
-                p: 2.5,
+                p: { xs: 2, sm: 2.5 },
                 display: "flex",
                 flexDirection: "column",
                 gap: 1.5,

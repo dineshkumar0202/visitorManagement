@@ -5,8 +5,8 @@ node_modules/
 server/dist/
 client/dist/
 
-# Environment variables
-.env
+# Environment variables (server only - contains secrets)
+server/.env
 
 # IDE
 .vscode/

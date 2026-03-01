@@ -67,7 +67,7 @@ const Visitors = () => {
           justifyContent: "space-between",
           alignItems: { xs: "flex-start", md: "center" },
           flexDirection: { xs: "column", md: "row" },
-          gap: 2,
+          gap: { xs: 1.5, md: 2 },
           mb: 3,
         }}
       >
@@ -83,7 +83,7 @@ const Visitors = () => {
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, md: 2 }, width: { xs: "100%", md: "auto" }, flexWrap: { xs: "wrap", sm: "nowrap" } }}>
           <TextField
             placeholder="Search by name, flat, or phone..."
             size="small"
@@ -100,7 +100,9 @@ const Visitors = () => {
               ),
             }}
             sx={{
-              width: { xs: "100%", md: 300 },
+              width: { xs: "100%", sm: "auto", md: 300 },
+              flex: { xs: 1, sm: "none" },
+              minWidth: { xs: 0, sm: 200 },
               "& .MuiOutlinedInput-root": {
                 borderRadius: "10px",
                 backgroundColor: "#fff",
@@ -144,6 +146,9 @@ const Visitors = () => {
         }}
       >
         <Tabs
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
           value={status}
           onChange={(_, newValue) => {
             setStatus(newValue);

@@ -57,7 +57,7 @@ function StatCard({
         background: "#fff",
         borderRadius: "14px",
         border: "1px solid #f1f5f9",
-        p: 2.5,
+        p: { xs: 2, sm: 2.5 },
         display: "flex",
         flexDirection: "column",
         gap: 1.5,
@@ -217,10 +217,11 @@ const Dashboard = () => {
         sx={{
           display: "grid",
           gridTemplateColumns: {
-            xs: "repeat(2, 1fr)",
+            xs: "1fr",
+            sm: "repeat(2, 1fr)",
             md: "repeat(4, 1fr)",
           },
-          gap: 2.5,
+          gap: { xs: 1.5, md: 2.5 },
           mb: 3,
         }}
       >
@@ -272,7 +273,7 @@ const Dashboard = () => {
             background: "#fff",
             borderRadius: "14px",
             border: "1px solid #f1f5f9",
-            p: 3,
+            p: { xs: 2, md: 3 },
           }}
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 3 }}>
@@ -376,7 +377,7 @@ const Dashboard = () => {
             background: "#fff",
             borderRadius: "14px",
             border: "1px solid #f1f5f9",
-            p: 3,
+            p: { xs: 2, md: 3 },
             display: "flex",
             flexDirection: "column",
           }}
@@ -405,7 +406,7 @@ const Dashboard = () => {
                   startAngle={90}
                   endAngle={-270}
                 >
-                  {stats.statusDistribution.map((entry, index) => (
+                  {stats.statusDistribution.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={DONUT_COLORS[index % DONUT_COLORS.length]} />
                   ))}
                 </Pie>

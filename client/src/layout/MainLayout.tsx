@@ -2,10 +2,11 @@ import {
   Box,
   Typography,
   Avatar,
-  InputBase,
   Badge,
   IconButton,
   Tooltip,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import Sidebar, { drawerWidth } from "./Sidebar";
@@ -40,6 +41,8 @@ function formatDate(): string {
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
   const { role } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const pageTitle = pageTitles[location.pathname] || "Page";
 
@@ -52,16 +55,18 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
       <Box
         sx={{
           flex: 1,
-          ml: `${drawerWidth}px`,
+          ml: isMobile ? 0 : `${drawerWidth}px`,
           display: "flex",
           flexDirection: "column",
+          transition: "margin-left 0.3s ease",
         }}
       >
         {/* Top Navbar */}
         <Box
           sx={{
             height: 70,
-            px: 3.5,
+            px: { xs: 2, sm: 3, md: 3.5 },
+            pl: isMobile ? 8 : { xs: 2, sm: 3, md: 3.5 },
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -77,7 +82,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
             <Typography
               sx={{
                 fontWeight: 700,
-                fontSize: "1.15rem",
+                fontSize: { xs: "1rem", md: "1.15rem" },
                 color: "#1e293b",
                 letterSpacing: "-0.3px",
                 lineHeight: 1.2,
@@ -87,7 +92,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
             </Typography>
             <Typography
               sx={{
-                fontSize: "0.75rem",
+                fontSize: { xs: "0.7rem", md: "0.75rem" },
                 color: "#94a3b8",
                 fontWeight: 500,
               }}
@@ -97,11 +102,11 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
           </Box>
 
           {/* Right: Actions */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            {/* Date Display */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, md: 1 } }}>
+            {/* Date Display - hidden on mobile */}
             <Box
               sx={{
-                display: { xs: "none", md: "flex" },
+                display: { xs: "none", lg: "flex" },
                 alignItems: "center",
                 gap: 0.8,
                 px: 1.5,
@@ -147,9 +152,9 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
-                ml: 1,
-                pl: 1.5,
-                borderLeft: "1px solid #f1f5f9",
+                ml: { xs: 0.5, md: 1 },
+                pl: { xs: 0.5, md: 1.5 },
+                borderLeft: { xs: "none", sm: "1px solid #f1f5f9" },
               }}
             >
               <Avatar
@@ -163,7 +168,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
               >
                 {role === "Admin" ? "A" : "S"}
               </Avatar>
-              <Box sx={{ display: { xs: "none", md: "block" } }}>
+              <Box sx={{ display: { xs: "none", sm: "block" } }}>
                 <Typography
                   sx={{
                     fontSize: "0.8rem",
@@ -187,7 +192,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
           component="main"
           sx={{
             flex: 1,
-            p: 3.5,
+            p: { xs: 2, sm: 2.5, md: 3.5 },
             backgroundColor: "#f8fafc",
           }}
         >

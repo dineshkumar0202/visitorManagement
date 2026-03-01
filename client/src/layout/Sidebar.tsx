@@ -1,11 +1,23 @@
-import { Box, Typography, Avatar, IconButton, Tooltip, Divider } from "@mui/material";
+import { useState } from "react";
+import {
+    Box,
+    Typography,
+    Avatar,
+    IconButton,
+    Tooltip,
+    Divider,
+    Drawer,
+    useMediaQuery,
+    useTheme,
+} from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
-import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import SecurityRoundedIcon from "@mui/icons-material/SecurityRounded";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import useAuth from "../hooks/useAuth";
 
 const drawerWidth = 240;
@@ -21,6 +33,9 @@ const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { role } = useAuth();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     const navItems: NavItem[] = [
         {
@@ -39,7 +54,6 @@ const Sidebar = () => {
             icon: <PersonAddAltRoundedIcon sx={{ fontSize: 20 }} />,
             adminOnly: true,
         },
-        
     ];
 
     const handleLogout = () => {
@@ -48,20 +62,20 @@ const Sidebar = () => {
         navigate("/");
     };
 
-    return (
+    const handleNavClick = (path: string) => {
+        navigate(path);
+        if (isMobile) setMobileOpen(false);
+    };
+
+    const sidebarContent = (
         <Box
             sx={{
                 width: drawerWidth,
                 minWidth: drawerWidth,
-                height: "100vh",
-                position: "fixed",
-                top: 0,
-                left: 0,
-                zIndex: 1200,
+                height: "100%",
                 display: "flex",
                 flexDirection: "column",
                 background: "#fff",
-                borderRight: "1px solid #f1f5f9",
                 overflow: "hidden",
             }}
         >
@@ -72,47 +86,59 @@ const Sidebar = () => {
                     pb: 2,
                     display: "flex",
                     alignItems: "center",
-                    gap: 1.5,
+                    justifyContent: "space-between",
                 }}
             >
-                <Box
-                    sx={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: "12px",
-                        background: "linear-gradient(135deg, #10b981, #34d399)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        boxShadow: "0 3px 10px rgba(16,185,129,0.25)",
-                    }}
-                >
-                    <SecurityRoundedIcon sx={{ color: "#fff", fontSize: 22 }} />
-                </Box>
-                <Box>
-                    <Typography
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                    <Box
                         sx={{
-                            color: "#1e293b",
-                            fontWeight: 800,
-                            fontSize: "1rem",
-                            letterSpacing: "-0.2px",
-                            lineHeight: 1.2,
+                            width: 40,
+                            height: 40,
+                            borderRadius: "12px",
+                            background: "linear-gradient(135deg, #10b981, #34d399)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            boxShadow: "0 3px 10px rgba(16,185,129,0.25)",
                         }}
                     >
-                        VMS
-                    </Typography>
-                    <Typography
-                        sx={{
-                            color: "#94a3b8",
-                            fontSize: "0.62rem",
-                            fontWeight: 600,
-                            textTransform: "uppercase",
-                            letterSpacing: "1.2px",
-                        }}
-                    >
-                        Visitor Management
-                    </Typography>
+                        <SecurityRoundedIcon sx={{ color: "#fff", fontSize: 22 }} />
+                    </Box>
+                    <Box>
+                        <Typography
+                            sx={{
+                                color: "#1e293b",
+                                fontWeight: 800,
+                                fontSize: "1rem",
+                                letterSpacing: "-0.2px",
+                                lineHeight: 1.2,
+                            }}
+                        >
+                            VMS
+                        </Typography>
+                        <Typography
+                            sx={{
+                                color: "#94a3b8",
+                                fontSize: "0.62rem",
+                                fontWeight: 600,
+                                textTransform: "uppercase",
+                                letterSpacing: "1.2px",
+                            }}
+                        >
+                            Visitor Management
+                        </Typography>
+                    </Box>
                 </Box>
+
+                {/* Close button for mobile */}
+                {isMobile && (
+                    <IconButton
+                        onClick={() => setMobileOpen(false)}
+                        sx={{ color: "#94a3b8" }}
+                    >
+                        <CloseRoundedIcon />
+                    </IconButton>
+                )}
             </Box>
 
             <Divider sx={{ borderColor: "#f1f5f9", mx: 2, mb: 1 }} />
@@ -142,7 +168,7 @@ const Sidebar = () => {
                     return (
                         <Box
                             key={item.path}
-                            onClick={() => navigate(item.path)}
+                            onClick={() => handleNavClick(item.path)}
                             sx={{
                                 display: "flex",
                                 alignItems: "center",
@@ -272,6 +298,67 @@ const Sidebar = () => {
                 </Box>
             </Box>
         </Box>
+    );
+
+    return (
+        <>
+            {/* Mobile: Hamburger button (shown via MainLayout) */}
+            {isMobile && (
+                <IconButton
+                    onClick={() => setMobileOpen(true)}
+                    sx={{
+                        position: "fixed",
+                        top: 14,
+                        left: 14,
+                        zIndex: 1300,
+                        bgcolor: "#fff",
+                        border: "1px solid #f1f5f9",
+                        borderRadius: "10px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        width: 42,
+                        height: 42,
+                        "&:hover": { bgcolor: "#f8fafc" },
+                    }}
+                >
+                    <MenuRoundedIcon sx={{ color: "#1e293b", fontSize: 22 }} />
+                </IconButton>
+            )}
+
+            {/* Mobile Drawer */}
+            {isMobile ? (
+                <Drawer
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={() => setMobileOpen(false)}
+                    ModalProps={{ keepMounted: true }}
+                    sx={{
+                        "& .MuiDrawer-paper": {
+                            width: drawerWidth,
+                            border: "none",
+                            boxShadow: "4px 0 24px rgba(0,0,0,0.1)",
+                        },
+                    }}
+                >
+                    {sidebarContent}
+                </Drawer>
+            ) : (
+                /* Desktop: Fixed sidebar */
+                <Box
+                    sx={{
+                        width: drawerWidth,
+                        minWidth: drawerWidth,
+                        height: "100vh",
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        zIndex: 1200,
+                        borderRight: "1px solid #f1f5f9",
+                    }}
+                >
+                    {sidebarContent}
+                </Box>
+            )}
+        </>
     );
 };
 
