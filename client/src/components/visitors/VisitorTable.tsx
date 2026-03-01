@@ -107,7 +107,7 @@ const VisitorTable = ({
             <Pagination
                 count={totalPages}
                 page={page}
-                onChange={(e, value) => onPageChange(value)}
+                onChange={(_e, value) => onPageChange(value)}
                 sx={{ mt: 2 }}
             />
         </>
